@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Generator promptów do opisów Allegro</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      margin: 40px; 
+      background: #121212; 
+      color: #f1f1f1;
+    }
+
+    input, button { width: 100%; padding: 10px; margin: 10px 0; }
+
+    .output { 
+      margin-top: 20px; 
+      padding: 15px; 
+      border: 1px solid #333; 
+      background: #1e1e1e; 
+      color: #f1f1f1; 
+      white-space: pre-wrap; 
+      border-radius: 5px;
+    }
+
+    /* Tytuł */
+    h1 {
+      color: #ff5a00; /* pomarańcz Allegro */
+    }
+
+    /* Pole input */
+    input[type="text"] {
+      background: #1e1e1e;
+      color: #f1f1f1;
+      border: 2px solid #ff5a00;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #e64a00; /* ciemniejszy pomarańcz przy focusie */
+    }
+
+    /* Przycisk "Generuj prompt" */
+    button {
+      background: #ff5a00;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #e64a00;
+    }
+
+    /* Rząd guzików ChatGPT + Kopiuj */
+    .btn-row { 
+      display: flex; 
+      gap: 10px; 
+      margin-top: 10px; 
+    }
+
+    .btn-row .btn {
+      flex: 1;
+      text-align: center;
+      padding: 12px 20px;
+      background: #fff;          /* białe tło */
+      color: #000;               /* czarny tekst */
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 17px;
+      height: 50px;
+      line-height: normal;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-row .btn:hover {
+      background: #ddd;          /* lekko szary hover */
+      transform: translateY(-2px);
+    }
+
+    .btn-row .btn:active {
+      transform: translateY(0);
+      background: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Generator promptów do opisów Allegro</h1>
+  <p>Podaj tytuł oferty, a generator przygotuje dla Ciebie gotowy prompt do ChatGPT.</p>
+
+  <!-- Pole input + przycisk -->
+  <input type="text" id="title" placeholder="np. SOMBRERO MEKSYKAŃSKIE KAPELUSZ CZARNE 50 CM">
+  <button onclick="generatePrompt()">Generuj prompt</button>
+
+  <!-- Wynik -->
+  <div class="output" id="promptOutput"></div>
+
+  <!-- Przyciski akcji -->
+  <div class="btn-row" id="actions" style="display:none;">
+    <button class="btn" onclick="copyPrompt()">📋 Skopiuj prompt</button>
+    <a class="btn" href="https://chat.openai.com/" target="_blank">💬 Otwórz ChatGPT</a>
+  </div>
+
+  <script>
+    function generatePrompt() {
+      const title = document.getElementById("title").value;
+
+      const prompt = `
+Na podstawie tytułu oferty: "${title}" 
+stwórz opis w 5 sekcjach:
+
+1. Krótki opis produktu (max 5 zdań),
+2. Zastosowanie,
+3. Dane techniczne i wymiary (lista punktowana),
+4. Zalety produktu (5 punktów),
+5. Dodatkowe informacje.
+6. FAQ
+
+Używaj nagłówków (np. z dużych liter), list punktowanych i krótkich akapitów.
+Nie dodawaj zachęt do zakupu ani kontaktu.
+Styl oficjalny, ale prosty i rzeczowy.
+      `;
+
+      document.getElementById("promptOutput").textContent = prompt.trim();
+      document.getElementById("actions").style.display = "flex";
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById("promptOutput").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Prompt skopiowany do schowka!");
+      });
+    }
+  </script>
+
+</body>
+</html>
